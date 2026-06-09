@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Flow | Premium Task Manager</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Background decorative blobs -->
+        <div class="bg-glow blob-1"></div>
+        <div class="bg-glow blob-2"></div>
+
+        <!-- Sidebar / Navigation Dashboard -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-wind logo-icon"></i>
+                </div>
+                <h2>Zenith Flow</h2>
+            </div>
+
+            <!-- Stats Module -->
+            <div class="stats-panel">
+                <div class="progress-circle-container">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle class="progress-ring__background" stroke="rgba(255, 255, 255, 0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                        <circle class="progress-ring__circle" id="progress-circle" stroke="url(#gradient)" stroke-width="8" stroke-linecap="round" fill="transparent" r="50" cx="60" cy="60"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#8a2387" />
+                                <stop offset="50%" stop-color="#e94057" />
+                                <stop offset="100%" stop-color="#f27121" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="progress-text">
+                        <span id="completion-percentage">0%</span>
+                        <small>Completed</small>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-num" id="total-count">0</span>
+                        <span class="stat-lbl">Total Tasks</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num" id="flagged-count">0</span>
+                        <span class="stat-lbl">Flagged</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Task Button Quick Action -->
+            <button class="btn btn-primary btn-block" id="btn-new-task-trigger">
+                <i class="fa-solid fa-plus"></i> New Task
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search tasks, descriptions...">
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="username">Guest Mode</span>
+                        <span class="status-dot online"></span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="dashboard-body">
+                <div class="view-header">
+                    <div>
+                        <h1 class="view-title">Task Dashboard</h1>
+                        <p class="view-subtitle">Organize and execute your daily flow efficiently.</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs / Filters -->
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-tab="all">
+                        <i class="fa-solid fa-list-check"></i> All Tasks <span class="badge" id="badge-all">0</span>
+                    </button>
+                    <button class="tab-btn" data-tab="pending">
+                        <i class="fa-solid fa-clock"></i> Yet To Do <span class="badge" id="badge-pending">0</span>
+                    </button>
+                    <button class="tab-btn" data-tab="flagged">
+                        <i class="fa-solid fa-bookmark"></i> Flagged <span class="badge" id="badge-flagged">0</span>
+                    </button>
+                    <button class="tab-btn" data-tab="completed">
+                        <i class="fa-solid fa-circle-check"></i> Completed <span class="badge" id="badge-completed">0</span>
+                    </button>
+                </div>
+
+                <!-- Tasks Listing -->
+                <div class="tasks-container" id="tasks-list">
+                    <!-- Tasks will be injected here via javascript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Create/Edit Task Modal Dialog -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Create New Task</h3>
+                <button class="close-btn" id="btn-close-modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="task-title">Title</label>
+                    <input type="text" id="task-title" required placeholder="What needs to be done?">
+                </div>
+                <div class="form-group">
+                    <label for="task-desc">Description</label>
+                    <textarea id="task-desc" rows="3" placeholder="Add some context or details..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option value="low">Low Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-auto checkbox-group">
+                        <label>
+                            <input type="checkbox" id="task-flagged">
+                            <span class="custom-checkbox"></span>
+                            <span class="checkbox-label"><i class="fa-solid fa-flag flag-icon-inline"></i> Flag Task</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
